@@ -77,6 +77,7 @@ int main() {
         auto end = high_resolution_clock::now();
         duration<double> diff = end - start;
         outputas(A, stud_skaicius, diff.count(), filename);
+        system("pause");
     }
     else {
         int eiga;
@@ -188,7 +189,6 @@ int main() {
         }
         outputas(A, stud_skaicius, 0, "");
         system("pause");
-        return 0;
     }
 }
 void outputas(vector<Studentas>& A, int stud_skaicius, double test_time, string filename) {
