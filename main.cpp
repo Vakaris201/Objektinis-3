@@ -16,7 +16,7 @@
 #include "Vector.h"
 
 using std::string;
-//using std::vector
+//using std::vector;
 template<typename T>
 using vector = Vector<T>;
 using std::cout;
@@ -187,6 +187,8 @@ int main() {
             if(index >= stud_skaicius) break;
         }
         outputas(A, stud_skaicius, 0, "");
+        system("pause");
+        return 0;
     }
 }
 void outputas(vector<Studentas>& A, int stud_skaicius, double test_time, string filename) {
