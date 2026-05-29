@@ -11,6 +11,7 @@ Jei atsakote `t`, bus paprašyta nurodyti failo pavadinimą. Programa perskaitys
 3 - generuoti studentų vardus, pavardes ir pažymius
 4 - baigti darbą
 5 - failo generavimas: programa paklaus kiek įrašų faile norėtumėte, ir sukurs failus pavadinimais <skaicius>.txt
+6 - palyginti kiek kartu isaugo atminti uzpildant Vector ir std::vector konteinerius
 ```
 3. Po duomenų surinkimo programa prašys pasirinkti, kaip skaičiuoti galutinį balą:
 ```
@@ -37,23 +38,23 @@ Jei pasirenkate atskyrimo funkcionalumą, rezultatai bus rašomi į vargsiukai.t
 ```
 
 VECTOR KLASĖS FUNKCIJŲ APRAŠYMAS
-1. Paprastesne funkcija: `size()`
-     - Gražina dabartinį vektoriaus elementų kiekį.
-     - Kode ši funkcija tiesiog grąžina vidinį kintamąjį `size_`, todėl ji yra greita ir nereikalauja jokių papildomų skaičiavimų ar ciklų.
+1. Funkcija: `reallocate()`
+     - Perskirsto atmintį į didesnį bloką ir perkelia esamus elementus.
+     - Kode su `allocate(new_capacity)` sukuriamas naujas atminties blokas, tuomet ciklu per esamus elementus kviečiama `construct_at(new_data + i, std::move(data_[i]))` kad elementai būtų sukurti naujoje vietoje, po to senoje vietoje kviečiama `destroy_at()` ir galiausiai sena atmintis deallocinama su `deallocate()`. Galiausiai atnaujinami `data_` ir `capacity_` nariai.
 
-2. Vidutinio sunkumo funkcija: `push_back()`
+2. Funkcija: `push_back()`
      - Prideda naują elementą į vektoriaus pabaigą.
      - Kode pirmiausia patikrinama, ar reikia padidinti talpą su `grow_if_needed()`. Jei vietos trūksta, iškviečiamas `reallocate()`, kuris sukuria didesnį masyvą ir perkelia senus elementus. Tada naujas elementas įdedamas į vietą `data_ + size_`, o `size_` padidinamas.
 
-3. Vidutinio sunkumo funkcija: `resize()`
+3. Funkcija: `resize()`
      - Pakeičia vektoriaus dydį į nurodytą reikšmę.
      - Kode, jei naujas dydis mažesnis, vyksta ciklas per perteklinius elementus ir jie sunaikinami su `destroy_at()`. Jei dydis didesnis, prireikus iškviečiamas `reallocate()`, o po to nauji elementai sukuriami su `construct_at()` ir užpildomi numatyta reikšme.
 
-4. Sunkesne funkcija: `insert()`
-     - Įterpia vieną arba kelis elementus į nurodytą vietą.
-     - Kode pirmiausia apskaičiuojama įterpimo vieta pagal iteratorių. Jei vietos trūksta, masyvas perskirstomas didesne talpa. Tada esami elementai pastumiami į dešinę, kad atsirastų vietos naujiems, ir nauji duomenys įrašomi į tarpą vienas po kito.
+4. Funkcija: `insert()` (range overload)
+     - Įterpia elementus iš intervalo `[first, last)` į nurodytą poziciją.
+     - Kode apskaičiuojamas intervalo ilgis (`std::distance`), jei reikia perskirstoma atmintis, tada esami elementai yra pastumiami į dešinę, kad būtų vietos naujiems. Tada pereinama per pateiktą intervalą ir kiekvienas elementas kopijuojamas ar konstruojamas naujoje vietoje su `construct_at`. Pasibaigus įterpimui atnaujinamas `size_`.
 
-5. Sunkesne funkcija: `erase()`
+5. Funkcija: `erase()`
      - Ištrina vieną elementą arba elementų intervalą iš vektoriaus.
      - Kode nustatomas trinamo intervalo ilgis, ištrinami tiksliniai elementai su `destroy_at()`, o likę elementai perkelti į ankstesnes pozicijas, kad vektoriaus viduje neliktų tarpų.
 
